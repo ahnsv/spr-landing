@@ -4,6 +4,7 @@ import {useState, useEffect} from "react";
 import Color from "color";
 import Head from "next/head";
 
+// TODO: make it reusable and make a route to show notion pages
 export default function Post({sections, etag, meta}) {
     return (
         <Layout className={`notion-post`}>
@@ -15,90 +16,74 @@ export default function Post({sections, etag, meta}) {
             </Head>
             {sections.map((section, i) => {
                 return (
-                    <section
-                        key={`section-${i}`}
-                        className={i === 0 ? "intro" : ""}
-                        id={i === 1 ? "first" : ""}
-                    >
-                        <header>
-                            {i === 0 ? (
-                                <>
-                                    <h1>{renderText(section.title)}</h1>
-                                    {section.children[0] &&
-                                    section.children[0].type === "text" ? (
-                                        <p>{renderText(section.children[0].value)}</p>
-                                    ) : null}
-                                    <ul className="actions">
-                                        <li>
-                                            <a href="#first" className="arrow scrolly">
-                                                <span className="label">Next</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </>
-                            ) : (
-                                <h2>{renderText(section.title)}</h2>
-                            )}
-                        </header>
-                        <div className="content">
-                            {section.children.map(subsection =>
-                                    subsection.type === "image" ? (
-                                        <span className={`image ${i === 0 ? "fill" : "main"}`}>
-                    <NotionImage src={subsection.src}/>
-                  </span>
-                                    ) : subsection.type === "text" ? (
-                                        i !== 0 && <p>{renderText(subsection.value)}</p>
-                                    ) : subsection.type === "list" ? (
-                                        i !== 0 && (
-                                            <ul>
-                                                {subsection.children.map(child => (
-                                                    <li>{renderText(child)}</li>
-                                                ))}
-                                            </ul>
-                                        )
-                                    ) : null
-                            )}
-                        </div>
-                    </section>
+                    <div key={i}>
+                    {
+                        section.children.map(subsection =>
+                                subsection.type === "image" ? (
+                                    <span className={`image ${i === 0 ? "fill" : "main"}`}>
+                      <NotionImage src={subsection.src}/>
+                    </span>
+                                ) : subsection.type === "text" ? (
+                                    i !== 0 && <p>{renderText(subsection.value)}</p>
+                                ) : subsection.type === "list" ? (
+                                    i !== 0 && (
+                                        <ul>
+                                            {subsection.children.map(child => (
+                                                <li>{renderText(child)}</li>
+                                            ))}
+                                        </ul>
+                                    )
+                                ) : null
+                        )
+                    }
+                    </div>
+                    //   <section
+                    //       key={`section-${i}`}
+                    //       className={i === 0 ? "intro" : ""}
+                    //       id={i === 1 ? "first" : ""}
+                    //   >
+                    //       <header>
+                    //           {i === 0 ? (
+                    //               <>
+                    //                   <h1>{renderText(section.title)}</h1>
+                    //                   {section.children[0] &&
+                    //                   section.children[0].type === "text" ? (
+                    //                       <p>{renderText(section.children[0].value)}</p>
+                    //                   ) : null}
+                    //                   <ul className="actions">
+                    //                       <li>
+                    //                           <a href="#first" className="arrow scrolly">
+                    //                               <span className="label">Next</span>
+                    //                           </a>
+                    //                       </li>
+                    //                   </ul>
+                    //               </>
+                    //           ) : (
+                    //               <h2>{renderText(section.title)}</h2>
+                    //           )}
+                    //       </header>
+                    //       <div className="content">
+                    //           {section.children.map(subsection =>
+                    //                   subsection.type === "image" ? (
+                    //                       <span className={`image ${i === 0 ? "fill" : "main"}`}>
+                    //   <NotionImage src={subsection.src}/>
+                    // </span>
+                    //                   ) : subsection.type === "text" ? (
+                    //                       i !== 0 && <p>{renderText(subsection.value)}</p>
+                    //                   ) : subsection.type === "list" ? (
+                    //                       i !== 0 && (
+                    //                           <ul>
+                    //                               {subsection.children.map(child => (
+                    //                                   <li>{renderText(child)}</li>
+                    //                               ))}
+                    //                           </ul>
+                    //                       )
+                    //                   ) : null
+                    //           )}
+                    //       </div>
+                    //   </section>
                 );
             })}
-            <section>
-                <header>
-                    <h2>Get Started</h2>
-                </header>
-                <div className="content">
-                    <p>Get started with Now + Next.js</p>
-                    <ul className="actions">
-                        <li>
-                            <a
-                                href="https://zeit.co"
-                                target="_blank"
-                                className="button primary large"
-                            >
-                                Get Started
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="https://zeit.co/blog/serverless-pre-rendering"
-                                target="_blank"
-                                className="button large"
-                            >
-                                Learn More
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </section>
-            <div className="copyright">
-                Created by{" "}
-                <a href="https://zeit.co" target="_blank">
-                    ZEIT
-                </a>{" "}
-                &mdash; Template Design by:{" "}
-                <a href="https://html5up.net/license">HTML5 UP</a>.
-            </div>
-
             }
         </Layout>
     )
