@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "dev": "now dev",
+    "deploy": "now"
+  },
   "dependencies": {
     "color": "^3.1.1",
     "fetch-retry": "^2.0.0",
